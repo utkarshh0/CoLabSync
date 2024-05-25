@@ -25,7 +25,7 @@ CoLabSync is a real-time collaborative code editor engineered with React, Node.j
 
 ### Installation
 
-   git clone https://github.com/uTkarsHH001/colabsync.git
-   cd colabsync
-   npm install
-   npm run dev
+  - git clone https://github.com/uTkarsHH001/colabsync.git
+  - cd colabsync
+  - npm install
+  - npm run dev

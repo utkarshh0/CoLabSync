@@ -7,10 +7,10 @@ export const initSocket = () => {
         const options = {
             'force new connection': true,
             reconnectionAttempts: Infinity,
-            timeout: 1000,
+            timeout: 10000,
             transports: ['websocket'],
         };
-        socket = io('http://localhost:5000', options);
+        socket = io('https://colabsync.onrender.com', options);
     }
     return socket;
 };

@@ -44,13 +44,16 @@ io.on('connection', (socket) => {
         })
     });
 
-    socket.on('change', (roomId, newCode) => {
+    socket.on('change', (roomId, newCode, sId) => {
         
-        const clients = getAllConnectedClients(roomId);
+        // const clients = getAllConnectedClients(roomId);
 
-        clients.forEach(({socketId}) => {
-            io.to(socketId).emit('updateEditor', newCode);
-        })
+        // clients.forEach(({socketId}) => {
+        //     if(socketId != sId){
+        //         io.to(socketId).emit('updateEditor', newCode);
+        //     }
+        // })
+        socket.in(roomId).emit('updateEditor', newCode);
     })
 
     // socket.on('sync', (socketId, code) => {

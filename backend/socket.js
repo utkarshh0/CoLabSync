@@ -11,6 +11,7 @@ export const initSocket = () => {
             transports: ['websocket'],
         };
         socket = io('https://colabsync.onrender.com', options);
+        // socket = io('http://localhost:5000', options);
     }
     return socket;
 };

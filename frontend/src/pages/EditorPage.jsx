@@ -6,11 +6,12 @@ import Editor from '../Components/Editor';
 import { initSocket } from '../../../backend/socket';
 import { CODE_SNIPPETS } from '../Components/constants';
 import logo from '../assets/logo.png'
+import Loader from '../Components/Loader';
 
 export default function EditorPage() {
     const [value, setValue] = useState(CODE_SNIPPETS.javascript);
     const [user, setUser] = useState([]);
-    const [socketInitialized, setSocketInitialized] = useState(false);
+    const [socketInitialized, setSocketInitialized] = useState(true);
     const reactNavigate = useNavigate();
     const socketRef = useRef(null);
     const codeRef = useRef('');
@@ -20,7 +21,7 @@ export default function EditorPage() {
     useEffect(() => {
         const init = async () => {
             socketRef.current = await initSocket();
-            setSocketInitialized(true);
+            setSocketInitialized(false);
 
             socketRef.current.on('connect_error', handleErrors);
             socketRef.current.on('connect_failed', handleErrors);
@@ -39,7 +40,7 @@ export default function EditorPage() {
                 }
                 setUser(clients)
 
-                // socketRef.current.emit('sync', code, socketId);
+                socketRef.current.emit('sync', code, socketId);
             });
 
             socketRef.current.on('updateEditor', (newCode) => {
@@ -52,7 +53,8 @@ export default function EditorPage() {
             })
         };
 
-        init();
+        init()
+
         return () => {
             socketRef.current.off('joined');
             socketRef.current.off('disconnected');
@@ -70,6 +72,8 @@ export default function EditorPage() {
             console.log(err);
         }
     }
+
+    if(socketInitialized) return <div className="w-screen h-screen flex justify-center items-center bg-zinc-800"><Loader /></div>
     
     return (
         <div className="w-screen h-screen flex">
@@ -89,14 +93,14 @@ export default function EditorPage() {
                 </div>
             </div>
             <div className="w-4/5 h-screen bg-main">
-                {socketInitialized && <Editor 
-                                        socketRef={socketRef} 
-                                        roomId={roomId} 
-                                        value={value} 
-                                        setValue={setValue}
-                                        onCodeChange={(code) => codeRef.current = code}
-                                      />
-                }
+                 <Editor 
+                    socketRef={socketRef} 
+                    roomId={roomId} 
+                    value={value} 
+                    setValue={setValue}
+                    onCodeChange={(code) => codeRef.current = code}
+                />
+                
             </div>
         </div>
         );

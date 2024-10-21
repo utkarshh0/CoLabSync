@@ -75,5 +75,24 @@ io.on('connection', (socket) => {
     });
 });
 
+app.get('/ping', (req, res) => {
+    res.status(200).send('Server is alive');
+});
+
+// Periodically send a request every 10 minutes to keep the server alive
+const keepServerAlive = () => {
+    setInterval(async () => {
+        try {
+            await axios.get('https://colabsync.onrender.com/ping'); // Replace with your actual endpoint
+            console.log('Ping sent to keep server alive.');
+        } catch (error) {
+            console.error('Error sending ping:', error.message);
+        }
+    }, 600000); // 600,000 ms = 10 minutes
+};
+
+// Call the keepServerAlive function to start the periodic requests
+keepServerAlive();
+
 const PORT = 5000;
 server.listen(PORT, () => console.log('Listening on 5000'));    

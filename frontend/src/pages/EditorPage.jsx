@@ -21,7 +21,7 @@ export default function EditorPage() {
     useEffect(() => {
         const init = async () => {
             socketRef.current = await initSocket();
-            setSocketInitialized(false);
+            console.log("SETTTT-----", socketRef.current)
 
             socketRef.current.on('connect_error', handleErrors);
             socketRef.current.on('connect_failed', handleErrors);
@@ -34,7 +34,9 @@ export default function EditorPage() {
             socketRef.current.emit('join', roomId, location.state?.username);
 
             socketRef.current.on('joined', ({clients, username}) => {
+
                 console.log('joined')
+                setSocketInitialized(false);
                 if(username != location.state.username){
                     toast.success(`${username} joined the room`);
                 }

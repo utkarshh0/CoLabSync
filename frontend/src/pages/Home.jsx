@@ -5,21 +5,22 @@ import { useNavigate } from 'react-router-dom';
 import logo from '../assets/logo.png'
 
 export default function Home() {
+    
     const [roomId, setRoomId] = useState('');
     const [username, setUsername] = useState('');
     const navigate = useNavigate();
 
-        function newRoom() {
-            const id = uuidv4(); 
-            setRoomId(id);
-            toast.success('Room created successfully!');
-        }
+    const newRoom = () => {
+        const id = uuidv4(); 
+        setRoomId(id);
+        toast.success('Room created successfully!');
+    }
 
-        function joinRoom() {
-            if (!roomId || !username) {
-                toast.error('RoomId and Username Required');
-                return;
-            }
+    const joinRoom = () => {
+        if (!roomId || !username) {
+            toast.error('RoomId and Username Required');
+            return;
+        }
 
         navigate(`/editor/${roomId}`, {
             state: {

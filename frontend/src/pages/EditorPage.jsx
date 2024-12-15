@@ -17,10 +17,13 @@ export default function EditorPage() {
     const codeRef = useRef('');
     const location = useLocation();
     const roomId = location.state.roomId;
+    console.log("sI------", socketInitialized)
 
     useEffect(() => {
         const init = async () => {
             socketRef.current = await initSocket();
+            setSocketInitialized(false)
+            
             console.log("SETTTT-----", socketRef.current)
 
             socketRef.current.on('connect_error', handleErrors);
@@ -36,13 +39,12 @@ export default function EditorPage() {
             socketRef.current.on('joined', ({clients, username}) => {
 
                 console.log('joined')
-                setSocketInitialized(false);
                 if(username != location.state.username){
                     toast.success(`${username} joined the room`);
                 }
                 setUser(clients)
 
-                socketRef.current.emit('sync', code, socketId);
+                socketRef.current.emit('sync', newCode, socketId);
             });
 
             socketRef.current.on('updateEditor', (newCode) => {
@@ -74,7 +76,7 @@ export default function EditorPage() {
             console.log(err);
         }
     }
-
+    // console.log(socketInitialized)
     if(socketInitialized) return <div className="w-screen h-screen flex justify-center items-center bg-zinc-800"><Loader /></div>
     
     return (

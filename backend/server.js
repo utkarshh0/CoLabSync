@@ -43,23 +43,25 @@ io.on('connection', (socket) => {
                 socketId: socket.id,
             })
         })
+
+        
     });
 
     socket.on('change', (roomId, newCode, sId) => {
         
-        // const clients = getAllConnectedClients(roomId);
+        const clients = getAllConnectedClients(roomId);
 
-        // clients.forEach(({socketId}) => {
-        //     if(socketId != sId){
-        //         io.to(socketId).emit('updateEditor', newCode);
-        //     }
-        // })
+        clients.forEach(({socketId}) => {
+            if(socketId != sId){
+                io.to(socketId).emit('updateEditor', newCode);
+            }
+        })
         socket.in(roomId).emit('updateEditor', newCode);
     })
 
-    // socket.on('sync', (socketId, code) => {
-    //     io.to(socketId).emit('updateEditor',  code);
-    // });
+    socket.on('sync', (socketId, newCode) => {
+        io.to(socketId).emit('updateEditor',  newCode);
+    });
 
     socket.on('disconnecting', () => {
         const rooms = [...socket.rooms];
@@ -74,25 +76,6 @@ io.on('connection', (socket) => {
         socket.leave();
     });
 });
-
-app.get('/ping', (req, res) => {
-    res.status(200).send('Server is alive');
-});
-
-// Periodically send a request every 10 minutes to keep the server alive
-const keepServerAlive = () => {
-    setInterval(async () => {
-        try {
-            await axios.get('https://colabsync.onrender.com/ping'); // Replace with your actual endpoint
-            console.log('Ping sent to keep server alive.');
-        } catch (error) {
-            console.error('Error sending ping:', error.message);
-        }
-    }, 600000); // 600,000 ms = 10 minutes
-};
-
-// Call the keepServerAlive function to start the periodic requests
-keepServerAlive();
 
 const PORT = 5000;
 server.listen(PORT, () => console.log('Listening on 5000'));    

@@ -42,9 +42,7 @@ io.on('connection', (socket) => {
                 username,
                 socketId: socket.id,
             })
-        })
-
-        
+        })   
     });
 
     socket.on('change', (roomId, newCode, sId) => {
@@ -59,9 +57,9 @@ io.on('connection', (socket) => {
         socket.in(roomId).emit('updateEditor', newCode);
     })
 
-    socket.on('sync', (socketId, newCode) => {
-        io.to(socketId).emit('updateEditor',  newCode);
-    });
+    // socket.on('sync', (socketId, newCode) => {
+    //     io.to(socketId).emit('updateEditor',  newCode);
+    // });
 
     socket.on('disconnecting', () => {
         const rooms = [...socket.rooms];

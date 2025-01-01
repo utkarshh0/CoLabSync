@@ -17,13 +17,10 @@ export default function EditorPage() {
     const codeRef = useRef('');
     const location = useLocation();
     const roomId = location.state.roomId;
-    console.log("sI------", socketInitialized)
 
     useEffect(() => {
         const init = async () => {
             socketRef.current = await initSocket();
-
-            console.log("SETTTT-----", socketRef.current)
 
             socketRef.current.on('connect_error', handleErrors);
             socketRef.current.on('connect_failed', handleErrors);
@@ -44,7 +41,7 @@ export default function EditorPage() {
                 }
                 setUser(clients)
 
-                socketRef.current.emit('sync', newCode, socketId);
+                socketRef.current.emit('sync', value, socketId);
             });
 
             socketRef.current.on('updateEditor', (newCode) => {
@@ -76,27 +73,29 @@ export default function EditorPage() {
             console.log(err);
         }
     }
-    // console.log(socketInitialized)
+
     if(socketInitialized) return <div className="w-screen h-screen flex justify-center items-center bg-zinc-800"><Loader /></div>
     
     return (
-        <div className="w-screen h-screen flex">
-            <div className="w-1/5 h-screen bg-bg p-3">
-                <img src={logo} className='my-3' alt="" />
-                <h1 className="h-[10%] text-textL font-bold py-2">Connected</h1>
-                <div className='h-[70%] flex flex-col justify-between'>
-                    <div className="flex gap-5 flex-wrap">
-                        {user.map(user => (
-                            <User key={user.socketId} username={user.username} />
-                        ))}
-                    </div>
-                    <div className='m-2'>
-                        <button onClick={copyRoom} className='w-full h-8 my-1 bg-textL rounded-lg'>Copy Room Id</button>
-                        <button onClick={() => reactNavigate('/')} className='w-full h-8 my-1 bg-textD rounded-lg'>Leave</button>
+        <div className="w-screen h-screen overflow-hidden flex">
+            <div className="w-1/4 lg:w-1/5 h-full bg-bg p-3 flex flex-col justify-between">
+                <div>
+                    <img src={logo} className='my-3' alt="" />
+                    <h1 className="text-textL font-bold py-4">Connected</h1>
+                    <div className='flex flex-col justify-between'>
+                        <div className="flex gap-5 flex-wrap">
+                            {user.map(user => (
+                                <User key={user.socketId} username={user.username} />
+                            ))}
+                        </div>
                     </div>
                 </div>
+                <div className='md:m-2 flex flex-col justify-center items-center'>
+                    <button onClick={copyRoom} className='w-full md:w-3/4 h-8 my-1 p-1 bg-textL rounded-lg'>Copy Room Id</button>
+                    <button onClick={() => reactNavigate('/')} className='w-full md:w-3/4 p-1 h-8 my-1 bg-textD rounded-lg'>Leave</button>
+                </div>
             </div>
-            <div className="w-4/5 h-screen bg-main">
+            <div className="w-3/4 h-screen lg:w-4/5 bg-main">
                  <Editor 
                     socketRef={socketRef} 
                     roomId={roomId} 
@@ -104,8 +103,7 @@ export default function EditorPage() {
                     setValue={setValue}
                     onCodeChange={(code) => codeRef.current = code}
                 />
-                
             </div>
         </div>
-        );
+    );
 }

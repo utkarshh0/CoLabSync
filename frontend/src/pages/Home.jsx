@@ -31,9 +31,9 @@ export default function Home() {
     }
 
     return (
-        <div className="bg-bg w-screen h-screen flex justify-center items-center text-textL">
+        <div className="bg-bg w-screen h-screen px-8 flex justify-center items-center text-textL">
             
-            <div className="bg-main w-[30rem]  p-4 rounded-lg">
+            <div className="bg-main w-full md:w-2/5 p-4 rounded-lg">
                 <img src={logo} className='h-20 mb-4' alt="" />
                 <p className="text-1xl">Paste Invitation Room ID</p>
                 <input type="text" placeholder="ROOM ID" value={roomId} onChange={(e) => setRoomId(e.target.value)} className="w-full text-black my-2 text-sm p-2 rounded-md" /><br />
@@ -41,7 +41,7 @@ export default function Home() {
                 <div className="flex justify-end my-2">
                     <button onClick={joinRoom} className="bg-textD text-black px-4 py-1 rounded-lg">JOIN</button>
                 </div>
-                <p className="text-center my-2">If You do not have an invite then create a <a href="#" onClick={newRoom} className="text-textD underline">new room</a></p>
+                <p className="w-full text-sm md:text-md text-center my-2">If You do not have an invite then create a <a href="#" onClick={newRoom} className="text-textD underline">new room</a></p>
             </div>
         </div>
     );

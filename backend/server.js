@@ -54,7 +54,6 @@ io.on('connection', (socket) => {
                 io.to(socketId).emit('updateEditor', newCode);
             }
         })
-        socket.in(roomId).emit('updateEditor', newCode);
     })
 
     // socket.on('sync', (socketId, newCode) => {
